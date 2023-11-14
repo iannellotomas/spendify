@@ -6,7 +6,7 @@ from utilities import validateInputs
 # from queries import doQuery
 
 
-def submenuAdd():
+def submenuAdd(connectionObj):
     while True:
         os.system("cls")
         print(
@@ -37,7 +37,7 @@ Elegí una opción → """
             )
         except KeyboardInterrupt:
             os.system("cls")
-            print("\n\t¡Vuelva pronto!")
+            print("\n\t¡Vuelva pronto!\n")
             exit()
 
         if menuOption.upper() != "V" and not (
@@ -84,10 +84,10 @@ Elegí una opción → """
                 # doQuery(sql, "INSERT", values=values)
                 # return
             case "2":
-                newCategory = addCategory.addCategory()
+                newCategory = addCategory.addCategory(connectionObj)
                 break
             case "3":
-                newBudget = addBudget.addBudget()
+                newBudget = addBudget.addBudget(connectionObj)
                 break
             case "4":
                 newPayMethod = addPayMethod.addPayMethod()
