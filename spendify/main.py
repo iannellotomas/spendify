@@ -2,16 +2,19 @@ from add import submenuAdd
 from search import submenuSearch
 from utilities import validateInputs
 from historic import historic, getBudgetReminder, getRecentExpenses
+from bd import mysql_python
 import os
 
 while True:
     os.system("cls")
+    connectionObj = mysql_python.makeConnection()
+    mysql_python.checkConnnection(connectionObj)
     print(
         f"""
     \t ~~~~~~~~~~~~~~~~~~~
     \t       SPENDIFY 
     \t ~~~~~~~~~~~~~~~~~~~
-{getBudgetReminder()}{getRecentExpenses()}
+{getBudgetReminder(connectionObj)}{getRecentExpenses(connectionObj)}
 1- AÑADIR
 Gastos, categorías, presupuesto y método de pago
 
@@ -36,7 +39,7 @@ Elegí una opción → """
         )
     except KeyboardInterrupt:
         os.system("cls")
-        print("\n\t¡Vuelva pronto!")
+        print("\n\t¡Vuelva pronto!\n")
         exit()
 
     if not (validateInputs.validateOptionInput(menuOption, 5, 0, 0)):
@@ -46,7 +49,7 @@ Elegí una opción → """
         case "":
             historic()
         case "1":
-            submenuAdd()
+            submenuAdd(connectionObj)
         case "2":
             submenuSearch()
         case "3":
@@ -55,5 +58,5 @@ Elegí una opción → """
             print("cuatro")
         case "5":
             os.system("cls")
-            print("\n\t¡Vuelva pronto!")
+            print("\n\t¡Vuelva pronto!\n")
             exit()
