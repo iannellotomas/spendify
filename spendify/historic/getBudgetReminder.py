@@ -1,12 +1,14 @@
 import os
+from queries import doQuery
 
+def getBudgetReminder(connectionObj):
 
-def getBudgetReminder():
-    currencyIso = ("ARS", "USD", "USDB")
-    currencyBudget = 2
+    budgetsFromDB = getBudgetsFromDB(connectionObj, 1)
 
-    definedBudget = 2000
-    reachedBudget = 870
+    definedBudget = budgetsFromDB[0][0]
+    reachedBudget = budgetsFromDB[0][1]
+    currencyBudget = budgetsFromDB[0][2]
+    
     percentReached = (
         min((reachedBudget / definedBudget) * 100, 100) if definedBudget != 0 else 0
     )
@@ -21,9 +23,11 @@ def getBudgetReminder():
     """
 
     message += f"""
-PRESUPUESTO: ${reachedBudget} / ${definedBudget} {currencyIso[currencyBudget-1]} 
+PRESUPUESTO: ${reachedBudget} / ${definedBudget} {currencyBudget} 
 {showPercentage(percentReached)}\n
     """
+
+    #connectionObj.close()
 
     return message
 
@@ -35,3 +39,13 @@ def showPercentage(percentage):
 
     bar = "=" * numBlocks + " " * numSpaces
     return f"[{bar}] {percentage:.2f}%"
+
+
+def getBudgetsFromDB(connectionObj, userID):
+    sql = f"SELECT presupuesto, presupuesto_actual, moneda FROM usuarios WHERE id = {userID}"
+
+    result = doQuery(sql, 'SELECT', connectionObj, doReturn=True)
+
+    #print(result)
+
+    return result
