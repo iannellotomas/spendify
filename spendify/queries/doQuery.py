@@ -1,30 +1,27 @@
-from bd import conexion
+def doQuery(sql, method, connectionObj, values=0, doReturn = False):
 
-def doQuery(sql, method, values=0, doReturn = False):
-
-    mycursor = conexion.cursor()  
+    mycursor = connectionObj.cursor()  
 
     match method:
         case 'SELECT':
             if doReturn:
                 mycursor.execute(sql)   
                 result = mycursor.fetchall()
-                print(result)
                 return result
         case 'INSERT':
             # sql = "INSERT INTO customers (name, address) VALUES (%s, %s)"
             # La tupla values se reemplaza en %s 
             if values:
                 mycursor.execute(sql, values)
-                conexion.commit()
+                connectionObj.commit()
                 print(mycursor.rowcount, "record inserted.")
         case 'UPDATE':
             mycursor.execute(sql)
-            conexion.commit()
+            connectionObj.commit()
             print(mycursor.rowcount, "record(s) affected")
         case 'DELETE':
             mycursor.execute(sql)
-            conexion.commit()
+            connectionObj.commit()
             
     return    
 
