@@ -192,7 +192,7 @@ def saveExpense(connectionObj, expense):
         fecha
     ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
 
-    values = (1, str(expense["name"]), int(expense["category"]), int(expense["currency"]), float(expense["amount"]), int(expense["payMethod"]), int(
+    values = (1, str(expense["name"]), int(expense["category"]), int(expense["currency"]), float(expense["amount"]), int(expense["paymethod"]), int(
         expense["dues"]["total"]), int(expense["dues"]["paid"]), int(expense["interests"]), str(f"{expense['date']['year']}-{expense['date']['month']}-{expense['date']['day']}"))
 
     doQuery(sql, 'INSERT', connectionObj, values=values)
@@ -214,7 +214,6 @@ def getCategories(connectionObj):
         categoriesData.append({"id": category[0], "nombre": category[1]})
 
     return categoriesData
-
 
 def getCategoryName(category):
     return category["nombre"]

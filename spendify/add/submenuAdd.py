@@ -3,9 +3,6 @@ import datetime
 from . import addExpense, addCategory, addBudget, addPayMethod
 from utilities import validateInputs
 
-# from queries import doQuery
-
-
 def submenuAdd(connectionObj):
     while True:
         os.system("cls")

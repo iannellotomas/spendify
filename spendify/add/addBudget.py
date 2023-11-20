@@ -58,15 +58,22 @@ def checkUserExistence(connectionObj):
 
     return len(result)
 
+def getUserBudget(connectionObj, user):
+    sql = f"SELECT moneda, presupuesto FROM usuarios WHERE id = {user}"
+    result = doQuery(sql, 'SELECT', connectionObj, doReturn=True)
+
+    return {
+        "currency": result[0][0],
+        "amount": result[0][1]
+    }
+
 def saveUserBudget(connectionObj, budget):
-    print(budget)
     sql = "INSERT INTO usuarios (nombre, moneda, presupuesto, presupuesto_actual) VALUES (%s, %s, %s, %s)"
-    values = ("test", budget['currency'], budget['amount'], budget['amount'])
+    values = ("test", budget['currency'], budget['amount'], setReachedBudget(connectionObj, budget['currency']))
     doQuery(sql, 'INSERT', connectionObj, values=values)
 
 def updateUserBudget(connectionObj, budget):
-    print(budget)
-    sql = f"UPDATE usuarios SET nombre = '{'test'}', moneda = {budget['currency']}, presupuesto = {budget['amount']}, presupuesto_actual = {budget['amount']} WHERE id = 1"
+    sql = f"UPDATE usuarios SET nombre = '{'test'}', moneda = {budget['currency']}, presupuesto = {budget['amount']}, presupuesto_actual = {setReachedBudget(connectionObj, budget['currency'])} WHERE id = 1"
     doQuery(sql, 'UPDATE', connectionObj)
 
 def getCurrencies(connectionObj):
@@ -90,3 +97,8 @@ def getCurrencyID(currencyName, currencyList):
 
 def getCurrencyName(currency):
     return currency["nombre"]
+
+def setReachedBudget(connectionObj, currencyId):
+    sql = f"SELECT SUM(monto) FROM gastos WHERE id_moneda = {int(currencyId)}"
+    reachedBudget = doQuery(sql, "SELECT", connectionObj, doReturn=True)
+    return int(reachedBudget[0][0])

@@ -22,6 +22,7 @@ def doQuery(sql, method, connectionObj, values=0, doReturn = False):
         case 'DELETE':
             mycursor.execute(sql)
             connectionObj.commit()
+            print(mycursor.rowcount, "record(s) affected")
             
     return    
 

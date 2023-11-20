@@ -2,4 +2,14 @@ from .submenuAdd import submenuAdd
 from .addExpense import addExpense
 from .addCategory import addCategory
 from .addBudget import addBudget
+from .addBudget import updateUserBudget
 from .addPayMethod import addPayMethod
+from .addExpense import getCategories
+from .addExpense import getCategoryID
+from .addExpense import getCategoryName
+from .addExpense import getCurrencies
+from .addExpense import getCurrencyName
+from .addExpense import getCurrencyID
+from .addExpense import getPayMethodID
+from .addExpense import getPayMethods
+from .addExpense import getPayMethodName

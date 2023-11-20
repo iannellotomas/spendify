@@ -3,6 +3,8 @@ from datetime import datetime
 from utilities import validateInputs, validateDate
 from queries import doQuery
 from . import management
+from edit import editExpense
+from delete import deleteExpense
 
 
 def historic(connectionObj):
@@ -61,7 +63,7 @@ def historic(connectionObj):
                     """
 //////////////////////////////////////
 
-Elegí una opción → """
+Elegí un gasto para editar/eliminar → """
                 ).upper()
 
             except KeyboardInterrupt:
@@ -90,10 +92,42 @@ Elegí una opción → """
                     """
 //////////////////////////////////////
 
-Elegí una opción → """
+Desea editar el gasto?
+
+1) Si
+2) No
+
+Escoge una opción → """
                 ).upper()
 
+                if decision == "V": 
+                    return
+                if not validateInputs.validateOptionInput(decision, 2, 0):
+                    continue
+                elif decision == "1":
+                    editExpense.submenuEdit(menuOption, connectionObj)
+                
+                decision = input(
+                    """
+//////////////////////////////////////
 
+Desea eliminar el gasto?
+
+1) Si
+2) No
+
+Escoge una opción → """
+                ).upper()
+
+                if decision == "V" or decision == "2": 
+                    return
+                if not validateInputs.validateOptionInput(decision, 2, 0):
+                    continue
+                elif decision == "1":
+                    print(menuOption)
+                    deleteExpense(menuOption, connectionObj)
+                    enter = input("...")
+                    
 def getExpenses(connectionObj):
     sql = "SELECT id, nombre, id_categoria, id_moneda, monto, fecha FROM gastos"
     result = doQuery(sql, 'SELECT', connectionObj, doReturn=True)

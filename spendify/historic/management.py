@@ -51,6 +51,85 @@ def showExpense(connectionObj, enterExpense = None, idExpense = None):
         else:
             print(f"{translatedExpenses[i-1]}: {value}")
 
+def showExpenseForEdit(expense, connectionObj):
+    translatedExpenses = (
+        "Nombre del gasto",
+        "Categoría",
+        "Moneda",
+        "Monto",
+        "Método de pago",
+        "Cuotas",
+        "Intereses",
+        "Fecha del gasto",
+    )
+
+    expense_info = {}
+    index = 0
+
+    for i, (key, value) in enumerate(expense.items()):
+        if key == "date":
+            index += 1
+            print(f"{index})", end=" ")
+            print(f"Fecha del gasto: {value['day']}/{value['month']}/{value['year']}")
+            expense_info[index] = {"field": "date", "value": value}
+
+        elif key == "dues":
+            if value["total"] == 0:  # Para pagos indefinidos
+                if value["paid"] == 0:
+                    index += 1
+                    print(f"{index})", end=" ")
+                    print(f"Cuotas: -")
+                    expense_info[index] = {"field": "dues", "value": value}
+                else:
+                    index += 1
+                    print(f"{index})", end=" ")
+                    print(f"Cuotas: {value['paid']} pagas")
+                    expense_info[index] = {"field": "dues", "value": value}
+            elif value["total"] > 1:  # Para pagos de varias cuotas
+                index += 1
+                print(f"{index})", end=" ")
+                print(f"Cuotas: {value['paid']} de {value['total']} pagas")
+                expense_info[index] = {"field": "dues", "value": value}
+            else:  # Para pagos de una sola vez
+                continue
+
+        elif key == "category":
+            index += 1
+            print(f"{index})", end=" ")
+            print(f"{translatedExpenses[i-1]}: {getCategoryNameByID(expense['category'], connectionObj)}")
+            expense_info[index] = {"field": "category", "value": value}
+
+        elif key == "paymethod":
+            index += 1
+            print(f"{index})", end=" ")
+            print(f"{translatedExpenses[i-1]}: {getPayMethodNameByID(expense['paymethod'], connectionObj)}")
+            expense_info[index] = {"field": "paymethod", "value": value}
+
+        elif key == "interests":
+            if expense["dues"]["total"] == 1:  # No mostrar intereses si no hay cuotas
+                continue
+            index += 1
+            print(f"{index})", end=" ")
+            print(f"Intereses: {value}%")
+            expense_info[index] = {"field": "interests", "value": value}
+
+        elif key == "amount":
+            index += 1
+            print(f"{index})", end=" ")
+            print(f"Monto: ${value:.2f} {getCurrencyNameByID(expense['currency'], connectionObj)}")
+            expense_info[index] = {"field": "amount", "value": value}
+
+        elif key == "currency" or key == "id":  # No mostrar moneda por separado
+            continue
+
+        else:
+            index += 1
+            print(f"{index})", end=" ")
+            print(f"{translatedExpenses[i-1]}: {value}")
+            expense_info[index] = {"field": key, "value": value}
+
+    return expense_info
+
 
 def getCurrencyNameByID(currencyID, connectionObj):
     sql = f"SELECT codigo FROM moneda WHERE id = {currencyID}"

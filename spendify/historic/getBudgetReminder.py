@@ -1,13 +1,20 @@
 import os
 from queries import doQuery
+from add import addBudget
 
 def getBudgetReminder(connectionObj):
+
+    budgetsFromDB = getBudgetsFromDB(connectionObj, 1)
+
+    addBudget.updateUserBudget(connectionObj, {"amount": budgetsFromDB[0][0], "currency": budgetsFromDB[0][2]})
+    os.system("cls")
 
     budgetsFromDB = getBudgetsFromDB(connectionObj, 1)
 
     definedBudget = budgetsFromDB[0][0]
     reachedBudget = budgetsFromDB[0][1]
     currencyBudget = budgetsFromDB[0][2]
+    
     
     percentReached = (
         min((reachedBudget / definedBudget) * 100, 100) if definedBudget != 0 else 0

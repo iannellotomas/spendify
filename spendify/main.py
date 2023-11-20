@@ -3,6 +3,7 @@ from search import submenuSearch
 from utilities import validateInputs
 from historic import historic, getBudgetReminder, getRecentExpenses
 from bd import mysql_python
+from reset import submenuResetDB
 import os
 
 while True:
@@ -55,7 +56,7 @@ Elegí una opción → """
         case "3":
             print("tres")
         case "4":
-            print("cuatro")
+            submenuResetDB(connectionObj, 1)
         case "5":
             os.system("cls")
             print("\n\t¡Vuelva pronto!\n")
